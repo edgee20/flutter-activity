@@ -10,7 +10,7 @@
       "instructor": "Dr. Maria Santos",
       "duration": "4 weeks",
       "students": 245,
-      "image": "workshop_mobile.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 2,
@@ -22,7 +22,7 @@
       "instructor": "Prof. Juan Dela Cruz",
       "duration": "1 day",
       "students": 120,
-      "image": "art_exhibit.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 3,
@@ -34,7 +34,7 @@
       "instructor": "Ms. Anna Reyes",
       "duration": "2 days",
       "students": 180,
-      "image": "seminar_business.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 4,
@@ -46,7 +46,7 @@
       "instructor": "Coach Mark Johnson",
       "duration": "3 days",
       "students": 500,
-      "image": "sports_fest.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 5,
@@ -58,7 +58,7 @@
       "instructor": "Maestro Roberto Cruz",
       "duration": "3 hours",
       "students": 350,
-      "image": "music_concert.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 6,
@@ -70,7 +70,7 @@
       "instructor": "Tech Community",
       "duration": "2 days",
       "students": 200,
-      "image": "hackathon.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 7,
@@ -82,7 +82,7 @@
       "instructor": "Dr. Peter Tan",
       "duration": "5 days",
       "students": 80,
-      "image": "leadership.jpg"
+      "image": "eventimage.jpg"
     },
     {
       "id": 8,
@@ -94,7 +94,7 @@
       "instructor": "Science Department",
       "duration": "2 days",
       "students": 150,
-      "image": "science_fair.jpg"
+      "image": "eventimage.jpg"
     }
   ]
 }
