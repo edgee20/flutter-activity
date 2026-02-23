@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Import Provider package
 import 'loginScreen.dart';
+import '../providers/themeProvider.dart'; // Import ThemeProvider
 
 /// SettingsScreen - Fifth Screen in the Application
 ///
@@ -9,6 +11,10 @@ import 'loginScreen.dart';
 /// - App preferences (notifications, theme, language)
 /// - About and help sections
 /// - Logout functionality with pushAndRemoveUntil()
+/// 
+/// THIRD-PARTY INTEGRATION (Act #7):
+/// ✅ Provider - For accessing ThemeProvider state
+/// ✅ SharedPreferences - For saving preferences (via ThemeProvider)
 ///
 /// NAVIGATION CONCEPTS DEMONSTRATED:
 /// 1. pop() - Normal back navigation (already in Profile)
@@ -27,15 +33,32 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  /// State variables for settings
-  /// TODO (Act #7): Save these using shared_preferences package
+  /// STATE VARIABLES FOR SETTINGS:
+  /// These track user preferences in the UI
+  /// 
+  /// IMPORTANT: Theme state is managed by ThemeProvider, not here!
+  /// We removed _darkModeEnabled because theme is app-wide state
+  /// managed by Provider, not local widget state.
+  /// 
+  /// TODO (Future Enhancement):
+  /// Save notification preferences using SharedPreferences
+  /// Similar to how ThemeProvider saves theme preference
   bool _notificationsEnabled = true;
   bool _emailNotifications = false;
-  bool _darkModeEnabled = false;
   String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
+    /// ACCESS THEME PROVIDER:
+    /// We use context.watch to listen to theme changes
+    /// This widget rebuilds when theme changes
+    /// 
+    /// WHY WATCH HERE?
+    /// - Need to display current theme state (dark/light)
+    /// - Switch should reflect actual app theme
+    /// - Updates automatically when theme changes
+    final themeProvider = context.watch<ThemeProvider>();
+    
     /// LayoutBuilder for responsive design
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -43,15 +66,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
+            title: Text(
               'Settings',
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).appBarTheme.foregroundColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            backgroundColor: Theme.of(context).primaryColor,
-            iconTheme: const IconThemeData(color: Colors.white),
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+            iconTheme: IconThemeData(
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
           ),
 
           /// ListView for scrollable settings
@@ -66,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               /// Preferences Section
               _buildSectionHeader('Preferences', isTablet),
-              _buildPreferencesSettings(isTablet),
+              _buildPreferencesSettings(context, isTablet, themeProvider),
 
               SizedBox(height: isTablet ? 30 : 20),
 
@@ -108,13 +133,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// Account settings with ListTile widgets
   /// ListTile provides consistent UI for settings items
   Widget _buildAccountSettings(BuildContext context, bool isTablet) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: Colors.grey.withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -184,14 +212,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Preferences settings with switches and dropdowns
-  Widget _buildPreferencesSettings(bool isTablet) {
+  /// 
+  /// PARAMETERS:
+  /// - context: BuildContext for showing snackbars
+  /// - isTablet: For responsive font sizes
+  /// - themeProvider: For accessing and controlling theme state
+  Widget _buildPreferencesSettings(
+    BuildContext context,
+    bool isTablet,
+    ThemeProvider themeProvider,
+  ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: Colors.grey.withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -245,10 +285,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const Divider(height: 1),
 
-          /// Dark Mode Toggle
+          /// DARK MODE TOGGLE - FULLY FUNCTIONAL! ✅
+          /// 
+          /// PROVIDER INTEGRATION:
+          /// This toggle now actually works with the theme system!
+          /// 
+          /// HOW IT WORKS:
+          /// 1. Switch value comes from themeProvider.isDarkMode
+          /// 2. When toggled, calls themeProvider.toggleTheme()
+          /// 3. ThemeProvider updates theme mode
+          /// 4. Saves preference to SharedPreferences
+          /// 5. Notifies all listeners (MyApp rebuilds)
+          /// 6. MaterialApp switches between light/dark theme
+          /// 7. ALL screens update with new theme automatically!
+          /// 
+          /// MAGIC:
+          /// - No need to manually update each screen
+          /// - Theme persists across app restarts
+          /// - Smooth transition with no flicker
+          /// - Works instantly across entire app
           SwitchListTile(
-            secondary: const Icon(
-              Icons.dark_mode_outlined,
+            secondary: Icon(
+              /// Show different icon based on theme
+              /// Dark mode: moon icon
+              /// Light mode: sun icon
+              themeProvider.isDarkMode 
+                  ? Icons.dark_mode 
+                  : Icons.light_mode_outlined,
               color: Colors.indigo,
             ),
             title: Text(
@@ -258,19 +321,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            subtitle: const Text('Enable dark theme'),
-            value: _darkModeEnabled,
-            onChanged: (value) {
-              setState(() {
-                _darkModeEnabled = value;
-
-                /// TODO (Act #7): Implement theme switching with Provider
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Dark mode will be implemented in Act #7'),
-                ),
-              );
+            subtitle: Text(
+              /// Show current theme status
+              themeProvider.isDarkMode 
+                  ? 'Dark theme enabled' 
+                  : 'Light theme enabled',
+            ),
+            /// VALUE FROM PROVIDER:
+            /// Reads current theme state from provider
+            /// Automatically updates when theme changes
+            value: themeProvider.isDarkMode,
+            
+            /// ONCHANGE HANDLER:
+            /// Called when user toggles the switch
+            /// No need for setState() - Provider handles it!
+            onChanged: (value) async {
+              /// Call provider's toggleTheme method
+              /// This does everything:
+              /// - Switches theme mode
+              /// - Saves to SharedPreferences
+              /// - Notifies listeners
+              /// - Rebuilds app with new theme
+              await themeProvider.toggleTheme();
+              
+              /// Show confirmation message
+              /// Mounted check prevents errors if widget disposed
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      value 
+                          ? '🌙 Dark mode enabled' 
+                          : '☀️ Light mode enabled',
+                    ),
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: colorScheme.primary,
+                  ),
+                );
+              }
             },
           ),
           const Divider(height: 1),
@@ -296,13 +384,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   /// About section with app information
   Widget _buildAboutSettings(BuildContext context, bool isTablet) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: Colors.grey.withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -323,7 +414,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               '1.0.0',
               style: TextStyle(
                 fontSize: isTablet ? 16 : 14,
-                color: Colors.grey.shade600,
+                color: theme.textTheme.bodySmall?.color,
               ),
             ),
           ),
@@ -397,7 +488,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         icon: const Icon(Icons.logout),
         label: const Text('Logout'),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red.shade700,
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(vertical: isTablet ? 18 : 15),
           shape: RoundedRectangleBorder(

@@ -27,8 +27,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get theme colors for dynamic theming
+    final theme = Theme.of(context);
+    
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      // Use theme background color instead of hardcoded
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Column(
           mainAxisSize: MainAxisSize.min,
@@ -36,34 +40,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Current Status ',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  style: TextStyle(
+                    color: theme.appBarTheme.foregroundColor?.withOpacity(0.7),
+                    fontSize: 12,
+                  ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_drop_down,
-                  color: Colors.white70,
+                  color: theme.appBarTheme.foregroundColor?.withOpacity(0.7),
                   size: 16,
                 ),
               ],
             ),
-            const Text(
+            Text(
               'Liu',
               style: TextStyle(
-                color: Colors.white,
+                color: theme.appBarTheme.foregroundColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
-        backgroundColor: const Color(0xFF2E3B8E),
+        // Use theme AppBar color
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        leading: const Icon(Icons.menu, color: Colors.white),
-        actions: const [
-          Icon(Icons.notifications_outlined, color: Colors.white),
-          SizedBox(width: 16),
+        leading: Icon(Icons.menu, color: theme.appBarTheme.foregroundColor),
+        actions: [
+          Icon(Icons.notifications_outlined, color: theme.appBarTheme.foregroundColor),
+          const SizedBox(width: 16),
         ],
       ),
       body: Column(
@@ -95,25 +103,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildSearchBar() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(color: Color(0xFF2E3B8E)),
+      decoration: BoxDecoration(color: theme.appBarTheme.backgroundColor),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFF3D4BA0),
+          // Slightly lighter/darker than AppBar for contrast
+          color: isDark 
+              ? colorScheme.surface 
+              : colorScheme.primary.withOpacity(0.8),
           borderRadius: BorderRadius.circular(25),
         ),
         child: Row(
           children: [
-            const Icon(Icons.search, color: Colors.white60),
+            Icon(
+              Icons.search,
+              color: isDark ? colorScheme.onSurface.withOpacity(0.6) : Colors.white60,
+            ),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: TextField(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: isDark ? colorScheme.onSurface : Colors.white,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search...',
-                  hintStyle: TextStyle(color: Colors.white60),
+                  hintStyle: TextStyle(
+                    color: isDark ? colorScheme.onSurface.withOpacity(0.6) : Colors.white60,
+                  ),
                   border: InputBorder.none,
                 ),
               ),
@@ -121,17 +143,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? colorScheme.primaryContainer : Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.tune, color: Color(0xFF2E3B8E), size: 18),
-                  SizedBox(width: 4),
+                  Icon(
+                    Icons.tune,
+                    color: isDark ? colorScheme.onPrimaryContainer : colorScheme.primary,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 4),
                   Text(
                     'Filters',
                     style: TextStyle(
-                      color: Color(0xFF2E3B8E),
+                      color: isDark ? colorScheme.onPrimaryContainer : colorScheme.primary,
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                     ),
@@ -154,13 +180,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Upcoming Events',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextButton(
                 onPressed: () {
@@ -172,19 +194,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   );
                 },
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
                       'See All',
                       style: TextStyle(
-                        color: Color(0xFF2E3B8E),
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
                       size: 12,
-                      color: Color(0xFF2E3B8E),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ],
                 ),
@@ -234,10 +256,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String imagePath,
     required List<Color> colors,
   }) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Container(
       width: 250,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -347,10 +372,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -373,9 +396,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     Text(
                       attendees,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF2E3B8E),
+                        color: colorScheme.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -384,19 +407,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.location_on_outlined,
                       size: 14,
-                      color: Colors.grey,
+                      color: theme.textTheme.bodySmall?.color,
                     ),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         location,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
+                        style: theme.textTheme.bodySmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -412,18 +432,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildAvatar(Color color) {
+    final theme = Theme.of(context);
     return Container(
       width: 24,
       height: 24,
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2),
+        border: Border.all(color: theme.colorScheme.surface, width: 2),
       ),
     );
   }
 
   Widget _buildNearbyYou() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -432,13 +456,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Nearby You',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: theme.textTheme.titleLarge,
               ),
               TextButton(
                 onPressed: () {
@@ -450,10 +470,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   'See All',
                   style: TextStyle(
-                    color: Color(0xFF2E3B8E),
+                    color: colorScheme.primary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -464,7 +484,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF2E3B8E),
+              color: colorScheme.primary,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -481,7 +501,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF3D4BA0),
+                    color: colorScheme.primary.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ClipRRect(
@@ -490,10 +510,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       'assets/images/eventimage.jpg',
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
+                        return Icon(
                           Icons.event,
                           size: 40,
-                          color: Colors.white,
+                          color: colorScheme.onPrimary,
                         );
                       },
                     ),
@@ -505,39 +525,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'POSTER MAKING',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: colorScheme.onPrimary,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'DATE AND TIME',
-                        style: TextStyle(fontSize: 12, color: Colors.white70),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colorScheme.onPrimary.withOpacity(0.7),
+                        ),
                       ),
-                      const Text(
+                      Text(
                         'LOCATION',
-                        style: TextStyle(fontSize: 12, color: Colors.white70),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colorScheme.onPrimary.withOpacity(0.7),
+                        ),
                       ),
-                      const Text(
+                      Text(
                         'DETAILS',
-                        style: TextStyle(fontSize: 12, color: Colors.white70),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colorScheme.onPrimary.withOpacity(0.7),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 // Distance
-                const Column(
+                Column(
                   children: [
-                    Icon(Icons.location_on, color: Colors.white, size: 20),
-                    SizedBox(height: 4),
+                    Icon(
+                      Icons.location_on,
+                      color: colorScheme.onPrimary,
+                      size: 20,
+                    ),
+                    const SizedBox(height: 4),
                     Text(
                       '1.2 KM',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: colorScheme.onPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),

@@ -33,18 +33,20 @@ class ProfileScreen extends StatelessWidget {
         return Scaffold(
           /// AppBar - Top navigation bar with title and actions
           appBar: AppBar(
-            title: const Text(
+            title: Text(
               'My Profile',
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).appBarTheme.foregroundColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             elevation: 0,
 
             /// Leading widget is the back button (automatically added by Flutter)
-            iconTheme: const IconThemeData(color: Colors.white),
+            iconTheme: IconThemeData(
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
             actions: [
               /// Settings icon button that navigates to Settings screen
               IconButton(

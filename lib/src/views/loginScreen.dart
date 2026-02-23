@@ -45,6 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 900;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       body: Container(
@@ -53,7 +55,10 @@ class _LoginScreenState extends State<LoginScreen> {
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             stops: const [0.0, 0.3],
-            colors: [const Color(0xFF2E3B8E).withOpacity(0.2), Colors.white],
+            colors: [
+              colorScheme.primary.withOpacity(0.2),
+              theme.scaffoldBackgroundColor,
+            ],
           ),
         ),
         child: Center(
