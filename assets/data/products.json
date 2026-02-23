@@ -1,0 +1,100 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Workshop: Mobile App Development",
+      "category": "Technology",
+      "price": 500.0,
+      "rating": 4.8,
+      "description": "Learn Flutter and build amazing mobile applications",
+      "instructor": "Dr. Maria Santos",
+      "duration": "4 weeks",
+      "students": 245,
+      "image": "workshop_mobile.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Art Exhibition: Modern Perspectives",
+      "category": "Arts",
+      "price": 200.0,
+      "rating": 4.5,
+      "description": "Explore contemporary art from emerging artists",
+      "instructor": "Prof. Juan Dela Cruz",
+      "duration": "1 day",
+      "students": 120,
+      "image": "art_exhibit.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Seminar: Entrepreneurship 101",
+      "category": "Business",
+      "price": 350.0,
+      "rating": 4.9,
+      "description": "Start your business journey with expert guidance",
+      "instructor": "Ms. Anna Reyes",
+      "duration": "2 days",
+      "students": 180,
+      "image": "seminar_business.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Sports Fest: Inter-College Tournament",
+      "category": "Sports",
+      "price": 150.0,
+      "rating": 4.7,
+      "description": "Compete in various sports with other colleges",
+      "instructor": "Coach Mark Johnson",
+      "duration": "3 days",
+      "students": 500,
+      "image": "sports_fest.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Music Concert: University Orchestra",
+      "category": "Music",
+      "price": 300.0,
+      "rating": 4.6,
+      "description": "Experience classical and modern music performances",
+      "instructor": "Maestro Roberto Cruz",
+      "duration": "3 hours",
+      "students": 350,
+      "image": "music_concert.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Hackathon: Code for Change",
+      "category": "Technology",
+      "price": 0.0,
+      "rating": 4.9,
+      "description": "48-hour coding marathon to solve real-world problems",
+      "instructor": "Tech Community",
+      "duration": "2 days",
+      "students": 200,
+      "image": "hackathon.jpg"
+    },
+    {
+      "id": 7,
+      "name": "Leadership Training Camp",
+      "category": "Personal Development",
+      "price": 450.0,
+      "rating": 4.8,
+      "description": "Develop leadership skills and team management",
+      "instructor": "Dr. Peter Tan",
+      "duration": "5 days",
+      "students": 80,
+      "image": "leadership.jpg"
+    },
+    {
+      "id": 8,
+      "name": "Science Fair: Innovation Showcase",
+      "category": "Science",
+      "price": 100.0,
+      "rating": 4.4,
+      "description": "Present and explore cutting-edge scientific research",
+      "instructor": "Science Department",
+      "duration": "2 days",
+      "students": 150,
+      "image": "science_fair.jpg"
+    }
+  ]
+}
