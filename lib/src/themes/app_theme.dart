@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 /// App Theme Definitions
-/// 
+///
 /// This file contains the complete theme configurations for both light and dark modes.
-/// 
+///
 /// WHAT IS A THEME?
 /// A theme is a collection of colors, fonts, and styles that define how your app looks.
 /// Instead of setting colors for each widget individually, you define them once here
 /// and Flutter applies them throughout your app automatically.
-/// 
+///
 /// BENEFITS:
 /// 1. Consistency - Same look across entire app
 /// 2. Easy updates - Change color once, updates everywhere
@@ -21,49 +21,43 @@ final ThemeData lightTheme = ThemeData(
   /// Tells Flutter we're using Material Design 3 (newest version)
   /// MD3 has more modern, rounded components
   useMaterial3: true,
-  
+
   /// BRIGHTNESS:
   /// Tells Flutter this is a light theme
   /// Some widgets automatically adjust their behavior based on this
   brightness: Brightness.light,
-  
+
   /// PRIMARY COLOR:
   /// Main brand color used throughout app
   /// Used for: AppBar, buttons, highlights, etc.
   primaryColor: const Color(0xFF2E3B8E), // Navy blue
-  
   /// COLOR SCHEME:
   /// Complete set of colors for your app
   /// Flutter automatically generates complementary colors
   colorScheme: ColorScheme.fromSeed(
     /// Seed color - Flutter generates other colors from this
     seedColor: const Color(0xFF2E3B8E),
-    
+
     /// Explicitly set brightness (light mode)
     brightness: Brightness.light,
-    
+
     /// Primary color - Main brand color
     primary: const Color(0xFF2E3B8E),
-    
+
     /// Secondary color - Accent color for variety
     /// Used for: Floating action buttons, chips, etc.
     secondary: const Color(0xFF4CAF50), // Green
-    
     /// Error color - For error messages and warnings
     error: const Color(0xFFD32F2F), // Red
-    
     /// Surface color - Background for cards, sheets, etc.
     surface: Colors.white,
-    
-    /// Background color - Main screen background
-    background: const Color(0xFFF5F5F5), // Light gray
   ),
-  
+
   /// SCAFFOLD BACKGROUND:
   /// Default background color for Scaffold widgets
   /// Most screens use Scaffold, so this sets overall background
   scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-  
+
   /// APPBAR THEME:
   /// Consistent styling for all AppBars in the app
   appBarTheme: const AppBarTheme(
@@ -77,37 +71,97 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w600,
     ),
   ),
-  
+
   /// TEXT THEME:
   /// Complete typography system with different text styles
   /// Instead of manually setting font size every time, use these styles
   textTheme: const TextTheme(
     /// Display styles - Largest text (hero sections, splash screens)
-    displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.bold, color: Colors.black87),
-    displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.black87),
-    displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.black87),
-    
+    displayLarge: TextStyle(
+      fontSize: 57,
+      fontWeight: FontWeight.bold,
+      color: Colors.black87,
+    ),
+    displayMedium: TextStyle(
+      fontSize: 45,
+      fontWeight: FontWeight.bold,
+      color: Colors.black87,
+    ),
+    displaySmall: TextStyle(
+      fontSize: 36,
+      fontWeight: FontWeight.bold,
+      color: Colors.black87,
+    ),
+
     /// Headline styles - Section headers, titles
-    headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black87),
-    headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black87),
-    headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black87),
-    
+    headlineLarge: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      color: Colors.black87,
+    ),
+    headlineMedium: TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.w600,
+      color: Colors.black87,
+    ),
+    headlineSmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      color: Colors.black87,
+    ),
+
     /// Title styles - Card titles, list titles
-    titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black87),
-    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
-    titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
-    
+    titleLarge: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      color: Colors.black87,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
+
     /// Body styles - Main content text
-    bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black87),
-    bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black87),
-    bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.black87),
-    
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+      color: Colors.black87,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: Colors.black87,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.normal,
+      color: Colors.black87,
+    ),
+
     /// Label styles - Button text, form labels
-    labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-    labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
-    labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.black87),
+    labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
+    labelMedium: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
+    labelSmall: TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
   ),
-  
+
   /// ELEVATED BUTTON THEME:
   /// Styling for all ElevatedButtons (raised buttons with shadow)
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -116,12 +170,10 @@ final ThemeData lightTheme = ThemeData(
       foregroundColor: Colors.white,
       elevation: 3,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   ),
-  
+
   /// TEXT BUTTON THEME:
   /// Styling for TextButtons (flat buttons without background)
   textButtonTheme: TextButtonThemeData(
@@ -130,7 +182,7 @@ final ThemeData lightTheme = ThemeData(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
   ),
-  
+
   /// INPUT DECORATION THEME:
   /// Styling for TextFields and form inputs
   inputDecorationTheme: InputDecorationTheme(
@@ -154,23 +206,18 @@ final ThemeData lightTheme = ThemeData(
     ),
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
   ),
-  
+
   /// CARD THEME:
   /// Styling for Card widgets
   cardTheme: CardThemeData(
     elevation: 4,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     color: Colors.white,
   ),
-  
+
   /// ICON THEME:
   /// Default icon styling
-  iconTheme: const IconThemeData(
-    color: Colors.black87,
-    size: 24,
-  ),
+  iconTheme: const IconThemeData(color: Colors.black87, size: 24),
 );
 
 /// DARK THEME
@@ -178,14 +225,14 @@ final ThemeData lightTheme = ThemeData(
 /// Uses darker colors that are easier on eyes in low light
 final ThemeData darkTheme = ThemeData(
   useMaterial3: true,
-  
+
   /// BRIGHTNESS:
   /// Tells Flutter this is a dark theme
   brightness: Brightness.dark,
-  
+
   /// Primary color stays same for brand consistency
   primaryColor: const Color(0xFF2E3B8E),
-  
+
   /// DARK COLOR SCHEME:
   /// Different background and surface colors for dark mode
   colorScheme: ColorScheme.fromSeed(
@@ -194,17 +241,16 @@ final ThemeData darkTheme = ThemeData(
     primary: const Color(0xFF4A5AC7), // Lighter blue for dark backgrounds
     secondary: const Color(0xFF66BB6A), // Lighter green for visibility
     error: const Color(0xFFEF5350),
-    
+
     /// Dark mode uses darker surfaces and backgrounds
     surface: const Color(0xFF1E1E1E), // Dark gray
-    background: const Color(0xFF121212), // Very dark gray (not pure black)
   ),
-  
+
   /// SCAFFOLD BACKGROUND:
   /// Very dark gray (better than pure black)
   /// Pure black (#000000) can cause smearing on OLED screens
   scaffoldBackgroundColor: const Color(0xFF121212),
-  
+
   /// APPBAR THEME (Dark Mode):
   /// Slightly lighter than background for distinction
   appBarTheme: const AppBarTheme(
@@ -218,31 +264,91 @@ final ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w600,
     ),
   ),
-  
+
   /// TEXT THEME (Dark Mode):
   /// Lighter text colors for dark backgrounds
   textTheme: const TextTheme(
-    displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.bold, color: Colors.white),
-    displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.white),
-    displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
-    
-    headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
-    headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white),
-    headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white),
-    
-    titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
-    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
-    titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
-    
-    bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.white70),
-    bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white70),
-    bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white60),
-    
-    labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
-    labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),
-    labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white),
+    displayLarge: TextStyle(
+      fontSize: 57,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+    displayMedium: TextStyle(
+      fontSize: 45,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+    displaySmall: TextStyle(
+      fontSize: 36,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+
+    headlineLarge: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+    headlineMedium: TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+    headlineSmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+
+    titleLarge: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
+
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+      color: Colors.white70,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: Colors.white70,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.normal,
+      color: Colors.white60,
+    ),
+
+    labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
+    labelMedium: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
+    labelSmall: TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
   ),
-  
+
   /// ELEVATED BUTTON THEME (Dark Mode):
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -250,12 +356,10 @@ final ThemeData darkTheme = ThemeData(
       foregroundColor: Colors.white,
       elevation: 2,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   ),
-  
+
   /// TEXT BUTTON THEME (Dark Mode):
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
@@ -263,7 +367,7 @@ final ThemeData darkTheme = ThemeData(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
   ),
-  
+
   /// INPUT DECORATION THEME (Dark Mode):
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
@@ -286,21 +390,16 @@ final ThemeData darkTheme = ThemeData(
     ),
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
   ),
-  
+
   /// CARD THEME (Dark Mode):
   cardTheme: CardThemeData(
     elevation: 3,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     color: const Color(0xFF1E1E1E), // Dark card background
   ),
-  
+
   /// ICON THEME (Dark Mode):
-  iconTheme: const IconThemeData(
-    color: Colors.white,
-    size: 24,
-  ),
+  iconTheme: const IconThemeData(color: Colors.white, size: 24),
 );
 
 /// HOW TO USE THESE THEMES:

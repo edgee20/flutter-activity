@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'settingsScreen.dart';
+import 'settings_screen.dart';
 
 /// ProfileScreen - Third Screen in the Application
 ///

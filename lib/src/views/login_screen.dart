@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'dashboardScreen.dart';
+import 'dashboard_screen.dart';
 
 /// LoginScreen - Tropical Filipino Festival Theme
 ///
