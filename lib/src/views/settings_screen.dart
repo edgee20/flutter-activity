@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'login_screen.dart';
+import '../providers/theme_provider.dart';
 
-/// SettingsScreen - Fifth Screen in the Application
+/// SettingsScreen - Tropical Filipino Festival Themed Settings
 ///
-/// PURPOSE:
-/// This screen provides app settings and user preferences including:
-/// - Account management options
-/// - App preferences (notifications, language)
-/// - About and help sections
-/// - Logout functionality with pushAndRemoveUntil()
-///
-/// NAVIGATION CONCEPTS DEMONSTRATED:
-/// 1. pop() - Normal back navigation (already in Profile)
-/// 2. pushAndRemoveUntil() - Replace entire navigation stack (logout)
-///
-/// pushAndRemoveUntil() EXPLAINED:
-/// - Pushes new route and removes all previous routes from stack
-/// - Used for logout: goes to login screen and prevents back navigation
-/// - (route) => false means remove ALL previous routes
-/// - (route) => route.isFirst keeps only first route
+/// Design follows the "Liu" app brand identity:
+/// - Sinulog/Ati-Atihan Festival inspiration
+/// - Warm, welcoming, community-oriented
+/// - Tropical colors: mango yellow, turquoise, coral, palm green
+/// - Modern and breathable layout
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -27,60 +18,211 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  /// STATE VARIABLES FOR SETTINGS:
-  /// These track user preferences in the UI
+  // Tropical color palette
+  static const Color _mangoYellow = Color(0xFFFFC107);
+  static const Color _turquoise = Color(0xFF26C6DA);
+  static const Color _coral = Color(0xFFFF6F3C);
+  static const Color _palmGreen = Color(0xFF66BB6A);
+  static const Color _softCream = Color(0xFFFFFBF5);
+  static const Color _textDark = Color(0xFF2C3E50);
+
+  // State variables
   bool _notificationsEnabled = true;
-  bool _emailNotifications = false;
   String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
-    /// LayoutBuilder for responsive design
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isTablet = constraints.maxWidth > 600;
+        final isWide = constraints.maxWidth >= 700;
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Settings',
-              style: TextStyle(
-                color: Theme.of(context).appBarTheme.foregroundColor,
-                fontWeight: FontWeight.bold,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: CustomScrollView(
+            slivers: [
+              // Tropical gradient header
+              _TropicalHeader(isWide: isWide),
+
+              // Settings content
+              SliverPadding(
+                padding: EdgeInsets.all(isWide ? 32.0 : 16.0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    // Account Section
+                    _SettingsSection(
+                      title: 'Account',
+                      icon: Icons.person,
+                      iconColor: _turquoise,
+                      isWide: isWide,
+                      children: [
+                        _SettingsItemTile(
+                          icon: Icons.edit,
+                          iconColor: _turquoise,
+                          title: 'Edit Profile',
+                          subtitle: 'Update your personal information',
+                          onTap: () {
+                            _showPlaceholder(context, 'Edit Profile');
+                          },
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.lock_outline,
+                          iconColor: _coral,
+                          title: 'Change Password',
+                          subtitle: 'Update your security credentials',
+                          onTap: () {
+                            _showPlaceholder(context, 'Change Password');
+                          },
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.security,
+                          iconColor: _palmGreen,
+                          title: 'Privacy Settings',
+                          subtitle: 'Manage your data and privacy',
+                          onTap: () {
+                            _showPlaceholder(context, 'Privacy Settings');
+                          },
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: isWide ? 28 : 20),
+
+                    // Preferences Section
+                    _SettingsSection(
+                      title: 'Preferences',
+                      icon: Icons.tune,
+                      iconColor: _mangoYellow,
+                      isWide: isWide,
+                      children: [
+                        _SettingsItemTile(
+                          icon: Icons.notifications_outlined,
+                          iconColor: _coral,
+                          title: 'Notifications',
+                          subtitle: 'Manage notification preferences',
+                          trailing: Switch(
+                            value: _notificationsEnabled,
+                            onChanged: (value) {
+                              setState(() {
+                                _notificationsEnabled = value;
+                              });
+                            },
+                            activeTrackColor: _coral,
+                            activeThumbColor: Colors.white,
+                          ),
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.dark_mode_outlined,
+                          iconColor: _textDark,
+                          title: 'Dark Mode',
+                          subtitle: 'Switch to dark theme',
+                          trailing: Consumer<ThemeProvider>(
+                            builder: (context, themeProvider, child) {
+                              return Switch(
+                                value: themeProvider.isDarkMode,
+                                onChanged: (value) {
+                                  themeProvider.setTheme(value);
+                                },
+                                activeTrackColor: _coral,
+                                activeThumbColor: Colors.white,
+                              );
+                            },
+                          ),
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.language,
+                          iconColor: _turquoise,
+                          title: 'Language',
+                          subtitle: _selectedLanguage,
+                          onTap: () {
+                            _showLanguageDialog(context);
+                          },
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: isWide ? 28 : 20),
+
+                    // Payments Section
+                    _SettingsSection(
+                      title: 'Payments',
+                      icon: Icons.credit_card,
+                      iconColor: _palmGreen,
+                      isWide: isWide,
+                      children: [
+                        _SettingsItemTile(
+                          icon: Icons.payment,
+                          iconColor: _palmGreen,
+                          title: 'Payment Methods',
+                          subtitle: 'Manage your payment options',
+                          onTap: () {
+                            _showPlaceholder(context, 'Payment Methods');
+                          },
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.receipt_long,
+                          iconColor: _mangoYellow,
+                          title: 'Billing History',
+                          subtitle: 'View past transactions',
+                          onTap: () {
+                            _showPlaceholder(context, 'Billing History');
+                          },
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: isWide ? 28 : 20),
+
+                    // Support Section
+                    _SettingsSection(
+                      title: 'Support',
+                      icon: Icons.help_outline,
+                      iconColor: _coral,
+                      isWide: isWide,
+                      children: [
+                        _SettingsItemTile(
+                          icon: Icons.help_center_outlined,
+                          iconColor: _turquoise,
+                          title: 'Help Center',
+                          subtitle: 'Find answers to common questions',
+                          onTap: () {
+                            _showPlaceholder(context, 'Help Center');
+                          },
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.chat_bubble_outline,
+                          iconColor: _palmGreen,
+                          title: 'Contact Us',
+                          subtitle: 'Get in touch with support',
+                          onTap: () {
+                            _showPlaceholder(context, 'Contact Us');
+                          },
+                        ),
+                        _SettingsItemTile(
+                          icon: Icons.info_outline,
+                          iconColor: _mangoYellow,
+                          title: 'About Liu',
+                          subtitle: 'App version and information',
+                          onTap: () {
+                            _showAboutDialog(context);
+                          },
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: isWide ? 32 : 24),
+
+                    // Logout Button
+                    _LogoutButton(
+                      isWide: isWide,
+                      onTap: () {
+                        _showLogoutDialog(context);
+                      },
+                    ),
+
+                    SizedBox(height: isWide ? 48 : 32),
+                  ]),
+                ),
               ),
-            ),
-            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-            iconTheme: IconThemeData(
-              color: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-          ),
-
-          /// ListView for scrollable settings
-          body: ListView(
-            padding: EdgeInsets.all(isTablet ? 24 : 16),
-            children: [
-              /// Account Section
-              _buildSectionHeader('Account', isTablet),
-              _buildAccountSettings(context, isTablet),
-
-              SizedBox(height: isTablet ? 30 : 20),
-
-              /// Preferences Section
-              _buildSectionHeader('Preferences', isTablet),
-              _buildPreferencesSettings(context, isTablet),
-
-              SizedBox(height: isTablet ? 30 : 20),
-
-              /// App Information Section
-              _buildSectionHeader('About', isTablet),
-              _buildAboutSettings(context, isTablet),
-
-              SizedBox(height: isTablet ? 30 : 20),
-
-              /// Logout Button
-              _buildLogoutButton(context, isTablet),
-
-              SizedBox(height: isTablet ? 40 : 20),
             ],
           ),
         );
@@ -88,536 +230,458 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  /// Builds section header with custom styling
-  Widget _buildSectionHeader(String title, bool isTablet) {
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: isTablet ? 15 : 10,
-        left: isTablet ? 5 : 0,
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: isTablet ? 20 : 18,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).primaryColor,
-        ),
+  void _showPlaceholder(BuildContext context, String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$feature - Coming Soon'),
+        backgroundColor: _coral,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
 
-  /// Account settings with ListTile widgets
-  /// ListTile provides consistent UI for settings items
-  Widget _buildAccountSettings(BuildContext context, bool isTablet) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          /// Edit Profile
-          ListTile(
-            leading: const Icon(Icons.person_outline, color: Colors.blue),
-            title: Text(
-              'Edit Profile',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Edit Profile - Coming Soon')),
-              );
-            },
-          ),
-          const Divider(height: 1),
-
-          /// Change Password
-          ListTile(
-            leading: const Icon(Icons.lock_outline, color: Colors.orange),
-            title: Text(
-              'Change Password',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              _showChangePasswordDialog(context);
-            },
-          ),
-          const Divider(height: 1),
-
-          /// Privacy Settings
-          ListTile(
-            leading: const Icon(
-              Icons.privacy_tip_outlined,
-              color: Colors.purple,
-            ),
-            title: Text(
-              'Privacy Settings',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Privacy Settings - Coming Soon')),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Preferences settings with switches and dropdowns
-  Widget _buildPreferencesSettings(BuildContext context, bool isTablet) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          /// Push Notifications Toggle
-          /// SwitchListTile combines ListTile with Switch widget
-          SwitchListTile(
-            secondary: const Icon(
-              Icons.notifications_outlined,
-              color: Colors.green,
-            ),
-            title: Text(
-              'Push Notifications',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            subtitle: const Text('Receive notifications about events'),
-            value: _notificationsEnabled,
-            onChanged: (value) {
-              setState(() {
-                _notificationsEnabled = value;
-
-                /// TODO (Act #7): Save to shared_preferences
-              });
-            },
-          ),
-          const Divider(height: 1),
-
-          /// Email Notifications Toggle
-          SwitchListTile(
-            secondary: const Icon(Icons.email_outlined, color: Colors.blue),
-            title: Text(
-              'Email Notifications',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            subtitle: const Text('Receive email updates'),
-            value: _emailNotifications,
-            onChanged: (value) {
-              setState(() {
-                _emailNotifications = value;
-              });
-            },
-          ),
-          const Divider(height: 1),
-
-          /// Language Selection
-          ListTile(
-            leading: const Icon(Icons.language, color: Colors.teal),
-            title: Text(
-              'Language',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            subtitle: Text(_selectedLanguage),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () => _showLanguageDialog(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// About section with app information
-  Widget _buildAboutSettings(BuildContext context, bool isTablet) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.info_outline, color: Colors.blue),
-            title: Text(
-              'App Version',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Text(
-              '1.0.0',
-              style: TextStyle(
-                fontSize: isTablet ? 16 : 14,
-                color: theme.textTheme.bodySmall?.color,
-              ),
-            ),
-          ),
-          const Divider(height: 1),
-
-          ListTile(
-            leading: const Icon(Icons.help_outline, color: Colors.orange),
-            title: Text(
-              'Help & Support',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              _showHelpDialog(context);
-            },
-          ),
-          const Divider(height: 1),
-
-          ListTile(
-            leading: const Icon(
-              Icons.description_outlined,
-              color: Colors.green,
-            ),
-            title: Text(
-              'Terms of Service',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Terms of Service')));
-            },
-          ),
-          const Divider(height: 1),
-
-          ListTile(
-            leading: const Icon(Icons.policy_outlined, color: Colors.purple),
-            title: Text(
-              'Privacy Policy',
-              style: TextStyle(
-                fontSize: isTablet ? 18 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Privacy Policy')));
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Logout button with confirmation dialog
-  /// Demonstrates pushAndRemoveUntil navigation
-  Widget _buildLogoutButton(BuildContext context, bool isTablet) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: isTablet ? 100 : 20),
-      child: ElevatedButton.icon(
-        onPressed: () => _showLogoutDialog(context),
-        icon: const Icon(Icons.logout),
-        label: const Text('Logout'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red.shade700,
-          foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: isTablet ? 18 : 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Shows logout confirmation dialog
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              /// Close dialog first
-              Navigator.pop(context);
-
-              /// NAVIGATION: pushAndRemoveUntil()
-              ///
-              /// PURPOSE:
-              /// Navigate to login screen and remove all previous screens
-              /// from navigation stack. This prevents user from pressing
-              /// back button to return to authenticated screens.
-              ///
-              /// SYNTAX:
-              /// Navigator.pushAndRemoveUntil(
-              ///   context,
-              ///   route,                    // New route to push
-              ///   (route) => condition      // Which routes to keep
-              /// )
-              ///
-              /// PREDICATE OPTIONS:
-              /// (route) => false          - Remove ALL routes (start fresh)
-              /// (route) => route.isFirst  - Keep only first route
-              /// (route) => route.settings.name == '/home'  - Keep specific route
-              ///
-              /// WHEN TO USE:
-              /// - Logout: Clear stack and go to login
-              /// - Onboarding: After completion, prevent going back
-              /// - Authentication: After successful login, clear login screens
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-
-                /// (route) => false removes ALL previous routes
-                /// Navigation stack will only contain LoginScreen
-                (route) => false,
-              );
-
-              /// Show confirmation message
-              /// Note: We can't use ScaffoldMessenger here because
-              /// context changes after navigation
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Shows language selection dialog
-  void _showLanguageDialog() {
+  void _showLanguageDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Select Language'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildLanguageOption('English', context),
             _buildLanguageOption('Filipino', context),
-            _buildLanguageOption('Spanish', context),
-            _buildLanguageOption('Japanese', context),
+            _buildLanguageOption('Cebuano', context),
           ],
         ),
       ),
     );
   }
 
-  /// Language option radio button
   Widget _buildLanguageOption(String language, BuildContext context) {
-    return RadioListTile<String>(
+    final isSelected = _selectedLanguage == language;
+    return ListTile(
       title: Text(language),
-      value: language,
-      groupValue: _selectedLanguage,
-      onChanged: (value) {
+      trailing: isSelected
+          ? Icon(Icons.check_circle, color: _coral)
+          : const Icon(Icons.circle_outlined, color: Colors.grey),
+      onTap: () {
         setState(() {
-          _selectedLanguage = value!;
+          _selectedLanguage = language;
         });
         Navigator.pop(context);
       },
     );
   }
 
-  /// Shows change password dialog
-  void _showChangePasswordDialog(BuildContext context) {
-    final currentPasswordController = TextEditingController();
-    final newPasswordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
-
+  void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Change Password'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
           children: [
-            TextField(
-              controller: currentPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Current Password',
-                prefixIcon: Icon(Icons.lock_outline),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: _turquoise.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: Icon(Icons.home_work, color: _turquoise, size: 28),
             ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: newPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'New Password',
-                prefixIcon: Icon(Icons.lock),
-              ),
+            const SizedBox(width: 12),
+            const Text('About Liu'),
+          ],
+        ),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Liu - Tropical Hospitality Platform',
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: confirmPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock),
-              ),
+            SizedBox(height: 8),
+            Text('Version 1.0.0'),
+            SizedBox(height: 16),
+            Text(
+              'Your trusted platform for Philippine boarding houses and transient stays.',
+              style: TextStyle(color: Colors.grey),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              /// TODO (Act #7): Implement actual password change logic
-              if (newPasswordController.text ==
-                  confirmPasswordController.text) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Password changed successfully!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Passwords do not match!'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: const Text('Change'),
+            child: Text('Close', style: TextStyle(color: _coral)),
           ),
         ],
       ),
     );
   }
 
-  /// Shows help dialog with instructions
-  void _showHelpDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.help_outline, color: Colors.orange),
-            SizedBox(width: 10),
-            Text('Help & Support'),
-          ],
-        ),
-        content: const SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Need Help?',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text('• Browse events and workshops in the Products section'),
-              SizedBox(height: 5),
-              Text('• View your profile and activity statistics'),
-              SizedBox(height: 5),
-              Text('• Customize app settings to your preference'),
-              SizedBox(height: 5),
-              Text('• Contact support at: support@univents.edu'),
-              SizedBox(height: 15),
-              Text(
-                'Common Issues:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text('Q: How do I register for an event?'),
-              Text('A: Tap on an event card and click "Enroll Now"'),
-              SizedBox(height: 10),
-              Text('Q: Can I cancel my registration?'),
-              Text('A: Yes, go to My Events in your profile'),
-            ],
-          ),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Opening email client...')),
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
               );
             },
-            child: const Text('Contact Support'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _coral,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text('Logout', style: TextStyle(color: Colors.white)),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// REUSABLE TROPICAL WIDGETS
+// ============================================================================
+
+/// Tropical gradient header with decorative elements
+class _TropicalHeader extends StatelessWidget {
+  final bool isWide;
+
+  const _TropicalHeader({required this.isWide});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: isWide ? 200 : 180,
+      pinned: false,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF26C6DA), // Turquoise
+                Color(0xFF4DD0E1), // Lighter turquoise
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Stack(
+            children: [
+              // Decorative sunburst background
+              Positioned(
+                top: -30,
+                right: -30,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                left: -40,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+              // Leaf accent
+              Positioned(
+                top: 40,
+                left: 20,
+                child: Icon(
+                  Icons.eco,
+                  size: isWide ? 50 : 40,
+                  color: Colors.white.withValues(alpha: 0.15),
+                ),
+              ),
+              // Content
+              Positioned(
+                bottom: isWide ? 40 : 30,
+                left: isWide ? 32 : 16,
+                right: isWide ? 32 : 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Settings',
+                      style: TextStyle(
+                        fontSize: isWide ? 36 : 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Manage your preferences',
+                      style: TextStyle(
+                        fontSize: isWide ? 18 : 16,
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Settings section card with tropical styling
+class _SettingsSection extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Color iconColor;
+  final List<Widget> children;
+  final bool isWide;
+
+  const _SettingsSection({
+    required this.title,
+    required this.icon,
+    required this.iconColor,
+    required this.children,
+    required this.isWide,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section header with icon
+        Padding(
+          padding: EdgeInsets.only(left: isWide ? 8 : 4, bottom: 12),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: iconColor, size: 20),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: isWide ? 20 : 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Settings card
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(children: _buildChildrenWithDividers()),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _buildChildrenWithDividers() {
+    final List<Widget> items = [];
+    for (int i = 0; i < children.length; i++) {
+      items.add(children[i]);
+      if (i < children.length - 1) {
+        items.add(
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: const Color(0xFF66BB6A).withValues(alpha: 0.08),
+            indent: 72,
+          ),
+        );
+      }
+    }
+    return items;
+  }
+}
+
+/// Individual settings item tile with tropical styling
+class _SettingsItemTile extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  const _SettingsItemTile({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        splashColor: const Color(0xFFFF6F3C).withValues(alpha: 0.1),
+        highlightColor: const Color(0xFFFF6F3C).withValues(alpha: 0.05),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              // Icon container
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: iconColor, size: 24),
+              ),
+              const SizedBox(width: 16),
+              // Title and subtitle
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              // Trailing widget or chevron
+              trailing ??
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Colors.grey,
+                  ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Coral-accented logout button
+class _LogoutButton extends StatelessWidget {
+  final bool isWide;
+  final VoidCallback onTap;
+
+  const _LogoutButton({required this.isWide, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFFFF6F3C).withValues(alpha: 0.3),
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFF6F3C).withValues(alpha: 0.15),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          splashColor: const Color(0xFFFF6F3C).withValues(alpha: 0.2),
+          highlightColor: const Color(0xFFFF6F3C).withValues(alpha: 0.1),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF6F3C).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.logout,
+                    color: Color(0xFFFF6F3C),
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFF6F3C),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

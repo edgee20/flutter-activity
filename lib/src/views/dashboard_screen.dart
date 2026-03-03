@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'profile_screen.dart';
+import 'boarding_house_listing_screen.dart';
+import 'boarding_house_details_screen.dart';
+import '../models/boarding_house.dart';
 
 /// DashboardScreen - Tropical Filipino Festival Theme
 ///
@@ -18,73 +21,13 @@ class _DashboardScreenState extends State<DashboardScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _shimmerController;
 
-  // Local JSON data - Minimum 8 boarding houses/transient stays
-  final List<Map<String, dynamic>> _properties = [
-    {
-      "id": 1,
-      "name": "Sunset Breeze Transient",
-      "price": 850,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 2,
-      "name": "Tropical Haven Boarding House",
-      "price": 1200,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 3,
-      "name": "Beachside Paradise Rooms",
-      "price": 950,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 4,
-      "name": "Fiesta House Transient",
-      "price": 750,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 5,
-      "name": "Palm Grove Apartments",
-      "price": 1500,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 6,
-      "name": "Coral Bay Lodging",
-      "price": 680,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 7,
-      "name": "Mango Tree Guest House",
-      "price": 890,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 8,
-      "name": "Island Breeze Transient",
-      "price": 1100,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 9,
-      "name": "Hibiscus Garden Rooms",
-      "price": 920,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-    {
-      "id": 10,
-      "name": "Sampaguita Inn",
-      "price": 800,
-      "image_url": "assets/images/eventimage.jpg",
-    },
-  ];
+  // Get boarding houses from model - 100 items
+  late final List<BoardingHouse> _properties;
 
   @override
   void initState() {
     super.initState();
+    _properties = BoardingHouse.getMockData();
     _shimmerController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
@@ -144,9 +87,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                           return Transform.rotate(
                             angle: _shimmerController.value * 2 * math.pi,
                             child: Icon(
-                              Icons.wb_sunny,
-                              size: 40,
+                              Icons.wb_sunny_rounded,
                               color: Colors.white.withOpacity(0.3),
+                              size: 80,
                             ),
                           );
                         },
@@ -164,28 +107,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                               text: const TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: 'BAHAY',
+                                    text: 'LIU',
                                     style: TextStyle(
-                                      fontSize: 28,
+                                      fontSize: 30,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white,
-                                      letterSpacing: 2,
-                                      shadows: [
-                                        Shadow(
-                                          color: Colors.black26,
-                                          offset: Offset(0, 2),
-                                          blurRadius: 4,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'FIESTA',
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w900,
-                                      color: Color(0xFFFF6F3C),
-                                      letterSpacing: 2,
+                                      letterSpacing: 3,
                                       shadows: [
                                         Shadow(
                                           color: Colors.black26,
@@ -218,8 +145,16 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
             backgroundColor: const Color(0xFF00ACC1),
             leading: IconButton(
-              icon: const Icon(Icons.menu_rounded, color: Colors.white),
-              onPressed: () {},
+              icon: const Icon(Icons.home_work, color: Colors.white),
+              tooltip: 'View All Stays',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BoardingHouseListingScreen(),
+                  ),
+                );
+              },
             ),
             actions: [
               IconButton(
@@ -263,12 +198,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text(
+                  Text(
                     'Available Properties',
-                    style: TextStyle(
-                      fontSize: 22,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF333333),
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -287,7 +220,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF333333),
+                        color: Color(0xFF1A1A1A),
                       ),
                     ),
                   ),
@@ -319,7 +252,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
@@ -335,9 +268,14 @@ class _DashboardScreenState extends State<DashboardScreen>
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
+              style: Theme.of(context).textTheme.bodyMedium,
               decoration: InputDecoration(
                 hintText: 'Search for transient stays...',
-                hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.color?.withOpacity(0.6),
+                ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
               ),
@@ -446,11 +384,11 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildPropertyCard(Map<String, dynamic> property) {
-    final id = property['id'];
-    final name = property['name'] as String;
-    final price = property['price'] as int;
-    final imageUrl = property['image_url'] as String;
+  Widget _buildPropertyCard(BoardingHouse boardingHouse) {
+    final theme = Theme.of(context);
+    
+    // Extract numeric ID from string ID (e.g., "bh_001" -> 1)
+    final numericId = int.tryParse(boardingHouse.id.replaceAll(RegExp(r'[^0-9]'), '')) ?? 1;
 
     // Generate different gradient colors for variety
     final gradients = [
@@ -460,11 +398,11 @@ class _DashboardScreenState extends State<DashboardScreen>
       [const Color(0xFF66BB6A), const Color(0xFF81C784)],
       [const Color(0xFFEC407A), const Color(0xFFFF8A80)],
     ];
-    final gradient = gradients[id % gradients.length];
+    final gradient = gradients[numericId % gradients.length];
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -474,242 +412,273 @@ class _DashboardScreenState extends State<DashboardScreen>
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image section with gradient overlay
-          Stack(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    BoardingHouseDetailsScreen(boardingHouse: boardingHouse),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Property image
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                child: Container(
-                  height: 180,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: gradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+              // Image section with gradient overlay
+              Stack(
+                children: [
+                  // Property image
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                  ),
-                  child: Image.asset(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: gradient,
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.house_rounded,
-                            size: 60,
-                            color: Colors.white.withOpacity(0.7),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              // Gradient overlay at bottom
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.6),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              // Tropical accent corner
-              Positioned(
-                top: 12,
-                right: 12,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.star_rounded, color: gradient[0], size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        '4.${5 + (id % 5)}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                          color: gradient[0],
+                    child: Container(
+                      height: 180,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: gradient,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              // Favorite button
-              Positioned(
-                top: 12,
-                left: 12,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.favorite_border_rounded,
-                    color: gradient[0],
-                    size: 18,
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          // Content section
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Property name
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF333333),
-                    letterSpacing: 0.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-
-                // Location indicator
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_rounded,
-                      size: 16,
-                      color: Colors.grey.shade600,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Near beaches & attractions',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade600,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-
-                // Price section with tropical accent
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: gradient),
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: gradient[0].withOpacity(0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
+                      child: Image.network(
+                        '${boardingHouse.imageUrl}?w=400&h=300&fit=crop',
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                              color: Colors.white,
                             ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: gradient,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.house_rounded,
+                                size: 60,
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  // Gradient overlay at bottom
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 80,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.6),
                           ],
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '₱$price',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white,
-                                    height: 1,
-                                    letterSpacing: 0.5,
-                                  ),
+                      ),
+                    ),
+                  ),
+                  // Tropical accent corner
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.star_rounded,
+                            color: gradient[0],
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '4.${5 + (numericId % 5)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                              color: gradient[0],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Favorite button
+                  Positioned(
+                    top: 12,
+                    left: 12,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.favorite_border_rounded,
+                        color: gradient[0],
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Content section
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Property name
+                    Text(
+                      boardingHouse.name,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.3,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+
+                    // Location indicator
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_rounded,
+                          size: 16,
+                          color: theme.textTheme.bodySmall?.color,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            boardingHouse.address,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Price section with tropical accent
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(colors: gradient),
+                              borderRadius: BorderRadius.circular(14),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: gradient[0].withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
                                 ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'per night',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white.withOpacity(0.9),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '₱${boardingHouse.pricePerNight.toStringAsFixed(0)}',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                        height: 1,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'per night',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.25),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_forward_rounded,
+                                    color: Colors.white,
+                                    size: 20,
                                   ),
                                 ),
                               ],
                             ),
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.25),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Icon(
-                                Icons.arrow_forward_rounded,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -61,23 +61,32 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenHeight < 700;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       body: Stack(
         children: [
           // Tropical sunset gradient background
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFFFD54F), // Golden mango yellow
-                  Color(0xFFFFB74D), // Warm sunshine
-                  Color(0xFFFF8A65), // Coral
-                  Color(0xFFFFFFFF), // White at bottom for content readability
-                ],
-                stops: [0.0, 0.3, 0.5, 0.85],
+                colors: isDark
+                    ? [
+                        const Color(0xFF0D1B1E),
+                        const Color(0xFF1A2F35),
+                        const Color(0xFF00838F),
+                        const Color(0xFF1A2F35),
+                      ]
+                    : [
+                        const Color(0xFFFFD54F),
+                        const Color(0xFFFFB74D),
+                        const Color(0xFFFF8A65),
+                        const Color(0xFFFFFFFF),
+                      ],
+                stops: const [0.0, 0.3, 0.6, 0.95],
               ),
             ),
           ),
@@ -138,15 +147,15 @@ class _LoginScreenState extends State<LoginScreen>
                               SizedBox(height: isSmallScreen ? 20 : 30),
 
                               // Welcome headline
-                              _buildWelcomeHeader(),
+                              _buildWelcomeHeader(isDark),
                               SizedBox(height: isSmallScreen ? 30 : 40),
 
                               // Login form card
-                              _buildLoginCard(isSmallScreen),
+                              _buildLoginCard(isSmallScreen, isDark),
                               SizedBox(height: isSmallScreen ? 20 : 24),
 
                               // Sign up link
-                              _buildSignUpLink(),
+                              _buildSignUpLink(isDark),
                             ],
                           ),
                         ),
@@ -211,18 +220,19 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildWelcomeHeader() {
+  Widget _buildWelcomeHeader(bool isDark) {
     return Column(
       children: [
         // Main brand name
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.95),
+            color: (isDark ? const Color(0xFF1A2F35) : Colors.white)
+                .withOpacity(0.95),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withOpacity(isDark ? 0.25 : 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -287,15 +297,17 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildLoginCard(bool isSmallScreen) {
+  Widget _buildLoginCard(bool isSmallScreen, bool isDark) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: EdgeInsets.all(isSmallScreen ? 24 : 32),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: Colors.black.withOpacity(isDark ? 0.28 : 0.15),
             blurRadius: 25,
             offset: const Offset(0, 10),
           ),
@@ -341,11 +353,11 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Remember Me',
                     style: TextStyle(
                       fontSize: 13,
-                      color: Color(0xFF666666),
+                      color: theme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -394,7 +406,7 @@ class _LoginScreenState extends State<LoginScreen>
                   'Or continue with',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey.shade600,
+                    color: theme.textTheme.bodySmall?.color,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -441,16 +453,18 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildInputLabel(String label, IconData icon) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Icon(icon, size: 18, color: const Color(0xFFFF6F3C)),
         const SizedBox(width: 6),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF333333),
+            color: theme.textTheme.titleMedium?.color,
             letterSpacing: 0.3,
           ),
         ),
@@ -463,21 +477,32 @@ class _LoginScreenState extends State<LoginScreen>
     required String hintText,
     required IconData icon,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF9E6),
+        color: isDark ? const Color(0xFF1A2F35) : const Color(0xFFFFF9E6),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFFFFD54F).withOpacity(0.3),
+          color: (isDark ? const Color(0xFF26C6DA) : const Color(0xFFFFD54F))
+              .withOpacity(0.3),
           width: 1.5,
         ),
       ),
       child: TextField(
         controller: controller,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          color: theme.textTheme.bodyLarge?.color,
+        ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+          hintStyle: TextStyle(
+            color: isDark ? Colors.grey.shade500 : Colors.grey.shade400,
+            fontSize: 14,
+          ),
           prefixIcon: Icon(icon, color: const Color(0xFFFF8A65), size: 20),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
@@ -490,22 +515,33 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildPasswordField() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF9E6),
+        color: isDark ? const Color(0xFF1A2F35) : const Color(0xFFFFF9E6),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFFFFD54F).withOpacity(0.3),
+          color: (isDark ? const Color(0xFF26C6DA) : const Color(0xFFFFD54F))
+              .withOpacity(0.3),
           width: 1.5,
         ),
       ),
       child: TextField(
         controller: _passwordController,
         obscureText: _obscurePassword,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          color: theme.textTheme.bodyLarge?.color,
+        ),
         decoration: InputDecoration(
           hintText: 'Enter your password',
-          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+          hintStyle: TextStyle(
+            color: isDark ? Colors.grey.shade500 : Colors.grey.shade400,
+            fontSize: 14,
+          ),
           prefixIcon: const Icon(
             Icons.lock_outline_rounded,
             color: Color(0xFFFF8A65),
@@ -516,7 +552,7 @@ class _LoginScreenState extends State<LoginScreen>
               _obscurePassword
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: Colors.grey.shade600,
+              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
               size: 20,
             ),
             onPressed: () {
@@ -606,11 +642,17 @@ class _LoginScreenState extends State<LoginScreen>
     required Color color,
     required VoidCallback onPressed,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200, width: 1.5),
+        border: Border.all(
+          color: isDark ? const Color(0xFF2A4A50) : Colors.grey.shade200,
+          width: 1.5,
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -629,7 +671,7 @@ class _LoginScreenState extends State<LoginScreen>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade700,
+                    color: theme.textTheme.bodyLarge?.color,
                   ),
                 ),
               ],
@@ -640,16 +682,18 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildSignUpLink() {
+  Widget _buildSignUpLink(bool isDark) {
     return Center(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: (isDark ? const Color(0xFF1A2F35) : Colors.white).withOpacity(
+            0.9,
+          ),
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withOpacity(isDark ? 0.2 : 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -662,7 +706,7 @@ class _LoginScreenState extends State<LoginScreen>
               "Don't have an account? ",
               style: TextStyle(
                 fontSize: 13,
-                color: Colors.grey.shade700,
+                color: isDark ? const Color(0xFFB2DFDB) : Colors.grey.shade700,
                 fontWeight: FontWeight.w500,
               ),
             ),

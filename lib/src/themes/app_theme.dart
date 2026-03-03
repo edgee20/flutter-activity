@@ -220,43 +220,35 @@ final ThemeData lightTheme = ThemeData(
   iconTheme: const IconThemeData(color: Colors.black87, size: 24),
 );
 
-/// DARK THEME
-/// Alternative theme for dark mode
-/// Uses darker colors that are easier on eyes in low light
+/// DARK THEME - Tropical Night Variant
+/// "Tropical Evening Festival" theme - warm, inviting dark mode
+/// Inspired by Philippine nights with warm lighting and ocean breeze
 final ThemeData darkTheme = ThemeData(
   useMaterial3: true,
 
-  /// BRIGHTNESS:
-  /// Tells Flutter this is a dark theme
   brightness: Brightness.dark,
 
-  /// Primary color stays same for brand consistency
-  primaryColor: const Color(0xFF2E3B8E),
+  /// Tropical night colors - deep ocean teal instead of gray/black
+  primaryColor: const Color(0xFF00838F), // Deep teal
 
-  /// DARK COLOR SCHEME:
-  /// Different background and surface colors for dark mode
   colorScheme: ColorScheme.fromSeed(
-    seedColor: const Color(0xFF2E3B8E),
+    seedColor: const Color(0xFF00838F),
     brightness: Brightness.dark,
-    primary: const Color(0xFF4A5AC7), // Lighter blue for dark backgrounds
-    secondary: const Color(0xFF66BB6A), // Lighter green for visibility
+    primary: const Color(0xFF26C6DA), // Aqua turquoise (muted for dark)
+    secondary: const Color(0xFFFF8A65), // Muted coral
     error: const Color(0xFFEF5350),
-
-    /// Dark mode uses darker surfaces and backgrounds
-    surface: const Color(0xFF1E1E1E), // Dark gray
+    surface: const Color(0xFF1A2F35), // Deep ocean blue-gray
+    onSurface: const Color(0xFFE0F2F1), // Soft aqua white
   ),
 
-  /// SCAFFOLD BACKGROUND:
-  /// Very dark gray (better than pure black)
-  /// Pure black (#000000) can cause smearing on OLED screens
-  scaffoldBackgroundColor: const Color(0xFF121212),
+  /// Deep ocean background - not pure black
+  scaffoldBackgroundColor: const Color(0xFF0D1B1E), // Deep teal-black
 
-  /// APPBAR THEME (Dark Mode):
-  /// Slightly lighter than background for distinction
+  /// AppBar with deep teal
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF1E1E1E),
+    backgroundColor: Color(0xFF00838F),
     foregroundColor: Colors.white,
-    elevation: 0, // Flat design in dark mode
+    elevation: 0,
     centerTitle: false,
     titleTextStyle: TextStyle(
       color: Colors.white,
@@ -265,141 +257,140 @@ final ThemeData darkTheme = ThemeData(
     ),
   ),
 
-  /// TEXT THEME (Dark Mode):
-  /// Lighter text colors for dark backgrounds
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 57,
       fontWeight: FontWeight.bold,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1), // Soft aqua white
     ),
     displayMedium: TextStyle(
       fontSize: 45,
       fontWeight: FontWeight.bold,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
     displaySmall: TextStyle(
       fontSize: 36,
       fontWeight: FontWeight.bold,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
 
     headlineLarge: TextStyle(
       fontSize: 32,
       fontWeight: FontWeight.bold,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
     headlineMedium: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.w600,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
     headlineSmall: TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.w600,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
 
     titleLarge: TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.w600,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
     titleMedium: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w500,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
     titleSmall: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
-      color: Colors.white,
+      color: Color(0xFFB2DFDB), // Muted aqua
     ),
 
     bodyLarge: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.normal,
-      color: Colors.white70,
+      color: Color(0xFFB2DFDB), // Muted aqua for readability
     ),
     bodyMedium: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Colors.white70,
+      color: Color(0xFFB2DFDB),
     ),
     bodySmall: TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.normal,
-      color: Colors.white60,
+      color: Color(0xFF80CBC4), // Desaturated teal
     ),
 
     labelLarge: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      color: Colors.white,
+      color: Color(0xFFE0F2F1),
     ),
     labelMedium: TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w500,
-      color: Colors.white,
+      color: Color(0xFFB2DFDB),
     ),
     labelSmall: TextStyle(
       fontSize: 11,
       fontWeight: FontWeight.w500,
-      color: Colors.white,
+      color: Color(0xFFB2DFDB),
     ),
   ),
 
-  /// ELEVATED BUTTON THEME (Dark Mode):
+  /// Buttons with tropical coral accent
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF4A5AC7),
-      foregroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFF8A65), // Muted coral
+      foregroundColor: const Color(0xFF0D1B1E), // Dark text on coral
       elevation: 2,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   ),
 
-  /// TEXT BUTTON THEME (Dark Mode):
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      foregroundColor: const Color(0xFF4A5AC7),
+      foregroundColor: const Color(0xFF26C6DA), // Aqua
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
   ),
 
-  /// INPUT DECORATION THEME (Dark Mode):
+  /// Input fields with deep teal background
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: const Color(0xFF2C2C2C), // Dark gray for inputs
+    fillColor: const Color(0xFF1A2F35), // Deep ocean surface
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFF404040)),
+      borderSide: const BorderSide(color: Color(0xFF26C6DA), width: 1),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFF404040)),
+      borderSide: const BorderSide(color: Color(0xFF004D57)),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFF4A5AC7), width: 2),
+      borderSide: const BorderSide(color: Color(0xFF26C6DA), width: 2),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
       borderSide: const BorderSide(color: Color(0xFFEF5350)),
     ),
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    labelStyle: const TextStyle(color: Color(0xFFB2DFDB)),
+    hintStyle: const TextStyle(color: Color(0xFF80CBC4)),
   ),
 
-  /// CARD THEME (Dark Mode):
+  /// Cards with ocean surface color
   cardTheme: CardThemeData(
     elevation: 3,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    color: const Color(0xFF1E1E1E), // Dark card background
+    color: const Color(0xFF1A2F35), // Deep ocean surface
   ),
 
-  /// ICON THEME (Dark Mode):
-  iconTheme: const IconThemeData(color: Colors.white, size: 24),
+  /// Icons with soft aqua
+  iconTheme: const IconThemeData(color: Color(0xFFB2DFDB), size: 24),
 );
 
 /// HOW TO USE THESE THEMES:

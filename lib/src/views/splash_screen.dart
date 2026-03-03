@@ -115,23 +115,35 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Get current theme
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return Scaffold(
       body: Stack(
         children: [
-          // Tropical sunset gradient background
+          // Tropical gradient background (adapts to theme)
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFFFFD54F), // Golden mango yellow
-                  Color(0xFFFFB74D), // Warm sunshine
-                  Color(0xFFFF8A65), // Coral
-                  Color(0xFFFF7043), // Warm pink-orange
-                  Color(0xFFEC407A), // Sunset pink
-                ],
-                stops: [0.0, 0.25, 0.5, 0.75, 1.0],
+                colors: isDark 
+                    ? [
+                        const Color(0xFF0D1B1E), // Deep ocean
+                        const Color(0xFF1A2F35), // Dark teal
+                        const Color(0xFF00838F), // Deep teal
+                      ]
+                    : [
+                        const Color(0xFFFFD54F), // Golden mango yellow
+                        const Color(0xFFFFB74D), // Warm sunshine
+                        const Color(0xFFFF8A65), // Coral
+                        const Color(0xFFFF7043), // Warm pink-orange
+                        const Color(0xFFEC407A), // Sunset pink
+                      ],
+                stops: isDark 
+                    ? [0.0, 0.5, 1.0]
+                    : [0.0, 0.25, 0.5, 0.75, 1.0],
               ),
             ),
           ),
@@ -267,13 +279,14 @@ class _SplashScreenState extends State<SplashScreen>
                                           ),
                                         );
                                       }),
-                                      // Main house icon
-                                      const Icon(
-                                        Icons.house_rounded,
-                                        size: 90,
-                                        color: Color(
-                                          0xFFFF6F3C,
-                                        ), // Fiesta red-orange
+                                      // Liu logo image
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'assets/logo/Gemini_Generated_Image_whi3ppwhi3ppwhi3.png',
+                                          width: 90,
+                                          height: 90,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -303,47 +316,20 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                             child: Column(
                               children: [
-                                // "CULTURA" inspired branding
-                                RichText(
-                                  text: const TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'BAHAY',
-                                        style: TextStyle(
-                                          fontSize: 48,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(
-                                            0xFFE53935,
-                                          ), // Fiesta red
-                                          letterSpacing: 3,
-                                          height: 1.1,
-                                          shadows: [
-                                            Shadow(
-                                              color: Color(0xFFFFD54F),
-                                              offset: Offset(3, 3),
-                                              blurRadius: 0,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: 'FIESTA',
-                                        style: TextStyle(
-                                          fontSize: 48,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(
-                                            0xFF1976D2,
-                                          ), // Turquoise blue
-                                          letterSpacing: 3,
-                                          height: 1.1,
-                                          shadows: [
-                                            Shadow(
-                                              color: Color(0xFFFF8A65),
-                                              offset: Offset(3, 3),
-                                              blurRadius: 0,
-                                            ),
-                                          ],
-                                        ),
+                                // "Liu" branding with tropical style
+                                Text(
+                                  'Liu',
+                                  style: TextStyle(
+                                    fontSize: 56,
+                                    fontWeight: FontWeight.w900,
+                                    color: const Color(0xFF26C6DA), // Turquoise
+                                    letterSpacing: 4,
+                                    height: 1.1,
+                                    shadows: [
+                                      Shadow(
+                                        color: const Color(0xFFFF8A65),
+                                        offset: const Offset(3, 3),
+                                        blurRadius: 2,
                                       ),
                                     ],
                                   ),
