@@ -175,6 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 );
               },
             ),
+            //Settings Icon
             actions: [
               IconButton(
                 icon: const Icon(Icons.person_rounded, color: Colors.white),
