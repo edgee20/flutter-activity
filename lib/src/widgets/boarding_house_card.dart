@@ -147,7 +147,10 @@ class BoardingHouseCard extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [aquaAccent.withOpacity(0.3), coralAccent.withOpacity(0.3)],
+                    colors: [
+                      aquaAccent.withOpacity(0.3),
+                      coralAccent.withOpacity(0.3),
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -156,7 +159,7 @@ class BoardingHouseCard extends StatelessWidget {
                   child: CircularProgressIndicator(
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
+                              loadingProgress.expectedTotalBytes!
                         : null,
                     color: Colors.white,
                   ),

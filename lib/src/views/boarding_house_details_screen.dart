@@ -70,7 +70,7 @@ class BoardingHouseDetailsScreen extends StatelessWidget {
                             colors: [
                               aquaAccent.withOpacity(0.3),
                               palmGreen.withOpacity(0.3),
-                              coralAccent.withOpacity(0.3)
+                              coralAccent.withOpacity(0.3),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -80,7 +80,7 @@ class BoardingHouseDetailsScreen extends StatelessWidget {
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
+                                      loadingProgress.expectedTotalBytes!
                                 : null,
                             color: Colors.white,
                           ),

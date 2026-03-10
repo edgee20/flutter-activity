@@ -386,9 +386,10 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   Widget _buildPropertyCard(BoardingHouse boardingHouse) {
     final theme = Theme.of(context);
-    
+
     // Extract numeric ID from string ID (e.g., "bh_001" -> 1)
-    final numericId = int.tryParse(boardingHouse.id.replaceAll(RegExp(r'[^0-9]'), '')) ?? 1;
+    final numericId =
+        int.tryParse(boardingHouse.id.replaceAll(RegExp(r'[^0-9]'), '')) ?? 1;
 
     // Generate different gradient colors for variety
     final gradients = [
@@ -456,7 +457,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             child: CircularProgressIndicator(
                               value: loadingProgress.expectedTotalBytes != null
                                   ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
+                                        loadingProgress.expectedTotalBytes!
                                   : null,
                               color: Colors.white,
                             ),
