@@ -13,12 +13,26 @@ import 'boarding_house_details_screen.dart';
 /// - Smooth navigation to details
 /// - Full dark mode support
 /// - Tropical Filipino hospitality theme
-class BoardingHouseListingScreen extends StatelessWidget {
+class BoardingHouseListingScreen extends StatefulWidget {
   const BoardingHouseListingScreen({super.key});
 
   @override
+  State<BoardingHouseListingScreen> createState() =>
+      _BoardingHouseListingScreenState();
+}
+
+class _BoardingHouseListingScreenState
+    extends State<BoardingHouseListingScreen> {
+  late final Future<List<BoardingHouse>> _boardingHousesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _boardingHousesFuture = BoardingHouse.loadFromAsset();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final boardingHouses = BoardingHouse.getMockData();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -49,20 +63,43 @@ class BoardingHouseListingScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: boardingHouses.length,
-        itemBuilder: (context, index) {
-          return BoardingHouseCard(
-            boardingHouse: boardingHouses[index],
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BoardingHouseDetailsScreen(
-                    boardingHouse: boardingHouses[index],
-                  ),
+      body: FutureBuilder<List<BoardingHouse>>(
+        future: _boardingHousesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  'Failed to load stays.\n${snapshot.error}',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyLarge,
                 ),
+              ),
+            );
+          }
+
+          final boardingHouses = snapshot.data ?? const <BoardingHouse>[];
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: boardingHouses.length,
+            itemBuilder: (context, index) {
+              return BoardingHouseCard(
+                boardingHouse: boardingHouses[index],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BoardingHouseDetailsScreen(
+                        boardingHouse: boardingHouses[index],
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
